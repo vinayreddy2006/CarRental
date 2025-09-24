@@ -2,6 +2,8 @@ import React from 'react'
 import { assets } from '../assets/assets'
 import { motion } from 'motion/react'
 
+//Banner
+
 const Banner = () => {
   return (
     <motion.div 
