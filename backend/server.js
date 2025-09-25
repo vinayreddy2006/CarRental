@@ -6,23 +6,35 @@ import userRouter from "./routes/userRoutes.js";
 import ownerRouter from "./routes/ownerRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
 
-//Initializing the express app
-const app=express();
+const app = express();
 
-//connecting database
-await connectDB();
+// Connect DB once
+(async () => {
+  try {
+    await connectDB();
+    console.log("Database connected");
+  } catch (err) {
+    console.error("DB connection failed", err);
+  }
+})();
 
-//middlewares
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req,res) => res.send("Server is running"));
-app.use('/api/user',userRouter);
-app.use('/api/owner',ownerRouter);
-app.use('/api/bookings',bookingRouter);
+// Routes
+app.get("/", (req, res) => res.send("Server is running"));
+app.use("/api/user", userRouter);
+app.use("/api/owner", ownerRouter);
+app.use("/api/bookings", bookingRouter);
 
+// ✅ Export for Vercel
+export default app;
 
-const PORT=process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`server runnig on the port ${PORT}`));
-
-//updated project
+// ✅ Run locally with `node server.js`
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`Server running locally on port ${PORT}`);
+  });
+}
